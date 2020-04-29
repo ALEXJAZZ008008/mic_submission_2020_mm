@@ -129,9 +129,6 @@
   \ifglsused{#1}{\Glsshorted{#1}}{\Glslonged{#1} (\glsshorted{#1})\glsunset{#1}}%
 }
 
-\newacronym[longs={Motion Compensated Images}, shorts={MCIRs}]{MCI}{MCI}{Motion Compensated Image}
-\newacronym[longs={Motion Compensated Image Reconstructions}, shorts={MCIRs}, longing={Motion Compensated Image Reconstructing}, shorting={MCIRing}, longed={Motion Compensated Image Reconstructed}, shorted={MCIRed}]{MCIR}{MCIR}{Motion Compensated Image Reconstruction}
-
 \newacronym{1D}{1D}{$1$-Dimensional}
 \newacronym{2D}{2D}{$2$-Dimensional}
 \newacronym{3D}{3D}{$3$-Dimensional}
@@ -173,6 +170,8 @@
 \newacronym[longs={Mean Absolute Errors}, shorts={MAEs}]{MAE}{MAE}{Mean Absolute Error}
 \newacronym{MAPE}{MAPE}{Mean Absolute Percentage Error}
 \newacronym{MBF}{MBF}{Myocardial Blood Flow}
+\newacronym[longs={Motion Compensated Image Reconstructions}, shorts={MCIRs}, longing={Motion Compensated Image Reconstructing}, shorting={MCIRing}, longed={Motion Compensated Image Reconstructed}, shorted={MCIRed}]{MCIR}{MCIR}{Motion Compensated Image Reconstruction}
+\newacronym[longs={Motion Compensated Images}, shorts={MCIs}]{MCI}{MCI}{Motion Compensated Image}
 \newacronym[longs={Motion Corrections}, shorts={MCs}, longing={Motion Correcting}, shorting={MCing} longed={Motion Corrected}, shorted={MCed}]{MC}{MC}{Motion Correction}
 \newacronym{MI}{MI}{Mutual Information}
 \newacronym{ML}{ML}{Maximum Likelihood}
@@ -226,12 +225,13 @@
 \end{minipage}}
 
 \begin{document}
-\title{PET/CT Respiratory Motion Correction using NAC Derived Deformation Fields to Warp and Attenuation Correct with a Single Attenuation Map}
+\title{PET/CT Respiratory Motion Correction Using NAC Derived Deformation Fields to Warp and Attenuation Correct With a Single Attenuation Map}
 
 \pagestyle{plain}
 \pagenumbering{gobble}
 
 \author{Alexander~C.~Whitehead,~\IEEEmembership{Student~Member,~IEEE,}
+        Nikos~Efthimiou,~\IEEEmembership{Member~IEEE},
         Scott~W.~Wollenweber,~\IEEEmembership{Senior~Member~IEEE,}
         Charles~W.~Stearns,~\IEEEmembership{Fellow,~IEEE,}
         Brian~F.~Hutton,~\IEEEmembership{Senior~Member,~IEEE,}
@@ -239,6 +239,7 @@
         and~Kris~Thielemans,~\IEEEmembership{Senior~Member,~IEEE}%
 
     \thanks{Alexander~C.~Whitehead, Brian~F.~Hutton and Kris~Thielemans are with the Institute of Nuclear Medicine, University College London, London, NW1~2BU, UK (contact: \texttt{alexander.whitehead.18@ucl.ac.uk}).}%
+    \thanks{Nikos~Efthimiou is with .}%
     \thanks{Alexander~C.~Whitehead and Jamie~R.~McClelland are with the Centre for Medical Image Computing, University College London, London, NW1~2BU, UK.}%
     \thanks{Scott~Wollenweber and Charles~Stearns are with Molecular Imaging \& Computed Tomography Engineering, GE Healthcare, USA}%
     \thanks{This research is supported by GE Healthcare, the NIHR UCLH Biomedical Research Centre and the EPSRC-funded UCL Centre for Doctoral Training in Medical Imaging (EP/L016478/1). The software used was partly produced by the Computational Collaborative Project in Synergistic PET-MR Reconstruction, CCP PET-MR, UK EPSRC grant EP/M022587/1.}%
