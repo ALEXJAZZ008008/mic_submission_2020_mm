@@ -1,0 +1,1 @@
+SUVmax: 4.6577697, SUVmean: 3.0704732, SUVmedian: 3.0544834, SUVpeak(max_roi): 3.3977664, SUVpeak(peak_roi): 3.5398827, SUVpeak(conv): 4.18882, SUVpeak(fit): 3.0525080004114447
