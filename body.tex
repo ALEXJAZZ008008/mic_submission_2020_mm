@@ -2,42 +2,39 @@
     \IEEEPARstart{R}{espiratory} motion reduces image resolution in \gls{PET} by introducing blurring \& mis-alignment artefacts~\cite{Nehmeh2008a}. Unless gated \gls{CT} are available (which themselves increase dose to the patient), to avoid mis-registration due to attenuation mismatches, most existing \gls{MC} methods rely on pair-wise registration of gated \gls{NAC} \gls{PET} volumes~\cite{LungMotionDiaphragmBaiBib}.%~\cite{Oliveira2014}.
     This is a challenging problem due to the low contrast \& high noise of these volumes. Other \gls{MC} methods can incorporate, directly, both \gls{MC} \& \glss{Mu-Map} estimation into reconstruction, however, these can be computationally expensive~\cite{Bousse2016b}.
     
-    %Some \gls{MM} algorithms approach \gls{MC} by fitting a \glss{RCM} on the \glss{DVF} which would deform a \gls{MCIR} (here defined as a weighted sum rather than a \gls{MC} reconstruction) volume to each input bin \& on the \gls{SS} value for that bin. Thus for any given \gls{SS} value the \gls{RCM} returns a \gls{DVF} to warp to the bin at that \gls{SS} value.%~\cite{McClelland2013}.
-    %A more recent approach uses
-    One \gls{MM} method use \glss{DVF} with the corresponding warping operation denoted as $\mathbf{W}(\mathbf{\alpha}_t)$, with $\mathbf{\alpha}_t$ a vector with coefficients at time $t$ \& the breathing surrogate signal $\mathbf{s}$:
+    One \gls{MM} method uses \gls{3D} B-spline \gls{CPG} with the corresponding warping operation denoted as $\mathbf{W}(\mathbf{\alpha}_t)$, with $\mathbf{\alpha}_t$ a vector with coefficients at time $t$ \& the breathing surrogate signal $\mathbf{s}$:
     
     \begin{equation}
         \forall t \in [1, n_t],\quad \alpha_{k, t} := R_{1, k} s_{1, t} + R_{2, k}
     \end{equation}
     
-    \noindent where $\alpha_{k,t}$ is the coefficient for node $k$ at time point $t$, \& $R_{i,k}$ are the model parameters where $i = [1, 2]$~\cite{McClelland2017}.
+    \noindent where $\alpha_{k, t}$ is the coefficient for node $k$ at time point $t$, \& $R_{i, k}$ are the model parameters where $i = [1, 2]$~\cite{McClelland2017}. One of the advantages of using a \gls{MM} approach over registering all the data to a static volume is that by incorporating a fit on the \gls{SS} noise from outlying registrations is diminished.
     
-    In our previous work we investigated the possibility of using \gls{MM} for respiratory \gls{MC} where the \gls{RCM} was derived from \gls{NAC} \gls{PET}. We found that \gls{NAC} \gls{TOF} \gls{PET} was suitable to estimate the motion from gated PET data without inter-respiratory cycle variation~\cite{Whitehead2019ImpactPET}. It is an aim of this work to determine if \gls{NAC} \gls{TOF} data are sufficient to model more complex inter-respiratory cycle motion. In addition, this work extends the method towards attenuation correction with a single \gls{Mu-Map} (from any position) to check if the new method is viable.
+    In our previous work we investigated the possibility of using \gls{MM} for respiratory \gls{MC} where the \gls{RCM} was derived from \gls{NAC} \gls{PET}. We found that \gls{NAC} \gls{TOF} \gls{PET} was suitable to estimate the motion from gated PET data without inter-respiratory cycle variation~\cite{Whitehead2019ImpactPET}. This work extends the method towards \gls{AC} with a single \gls{Mu-Map} (from any position).
 
 \section{Methods} \label{sec:methods}
     \subsection{XCAT Volume Generation} \label{sec:xcat_volume_generation}
         \gls{XCAT}%~\cite{Segars2010}
-        was used to generate $240$ volumes over a \SI{120}{\second} breathing cycle (with inter-respiratory cycle variation) derived from a respiratory trace captured using a \gls{RPM}. Data used max displacement settings for the extent of \gls{AP} \& \gls{SI} motion of \SI{1.2}{\centi\metre} \& \SI{2.0}{\centi\metre} respectively. Activity concentrations were derived from a static \gls{FDG} patient scan. The \gls{FOV} included the base of the lungs, diaphragm \& the top of the liver with a \SI{20}{\milli\metre} diameter spherical lesion placed into the centre of the right lung.
+        was used to generate $240$ volumes over a \SI{120}{\second} respiratory trace (with inter-respiratory cycle variation) derived from a respiratory trace captured using a \gls{RPM}. The max displacement of \gls{AP} \& \gls{SI} motion was set to \SI{1.2}{\centi\metre} \& \SI{2.0}{\centi\metre} respectively. Activity concentrations were derived from a static \gls{FDG} patient scan. The \gls{FOV} included the base of the lungs, diaphragm \& the top of the liver with a \SI{20}{\milli\metre} diameter spherical lesion placed into the centre of the right lung.
     
     \subsection{PET Acquisition Simulation} \label{sec:pet_acquisition_simulation}
         \gls{PET} acquisitions were simulated %(and reconstructed)
-        using \gls{STIR}~\cite{Thielemans2012, Efthimiou2018} through \gls{SIRF}~\cite{ Ovtchinnikov2019CCPPETMRSIRF} to forward project the data using the geometry of a \gls{GE} Discovery 710 with a \gls{TOF} resolution of \SI{375}{\pico\second}. This \gls{TOF} resolution is higher than that of the \gls{GE} Discovery 710, but is closer to the newer \gls{GE} Signa \gls{PET}/\gls{MR} system. \gls{TOF} mashing is used to reduce computation time resulting in $13$ \gls{TOF} time bins of size \SI{376.5}{\pico\second}. Attenuation was included%, in the simulation,
-        using the relevant \glss{Mu-Map} generated by \gls{XCAT}. Scatter \& randoms were not taken into account. Multiple noise realisations were generated to simulate an acquisition over \SI{120}{\second}, emulating a standard single bed position acquisition. A respiratory \gls{SS} was generated using \gls{PCA}.%~\cite{Thielemans2011}.
+        using \gls{STIR}~\cite{Thielemans2012, Efthimiou2018} through \gls{SIRF}~\cite{ Ovtchinnikov2019CCPPETMRSIRF} to forward project the data using the geometry of a \gls{GE} Discovery $710$ with a \gls{TOF} resolution of \SI{375}{\pico\second}. This \gls{TOF} resolution is higher than that of the \gls{GE} Discovery 710, but is closer to the newer \gls{GE} Signa \gls{PET}/\gls{MR} system. \gls{TOF} mashing is used to reduce computation time resulting in $13$ \gls{TOF} time bins of size \SI{376.5}{\pico\second}. Attenuation was included using the relevant \glss{Mu-Map} generated by \gls{XCAT}. Scatter \& randoms were not taken into account. Multiple noise realisations were generated to simulate an acquisition over \SI{120}{\second}, emulating a standard single bed position acquisition. A respiratory \gls{SS} was generated using \gls{PCA}.%~\cite{Thielemans2011}.
         This was used to gate the data into $10$ respiratory bins using displacement gating.% For the purpose of the \gls{RCM} fitting, \gls{SS} values were ascertained for the post-gated data by taking an average of the \gls{SS} values of the data in each bin.
     
     \subsection{Non-Attenuation Corrected Image Reconstruction} \label{sec:non-attenuation_corrected_image_reconstruction}
-        Data were reconstructed without \gls{AC} using \gls{OSEM} with $2$ full iterations \& $24$ subsets.%~\cite{Hudson1994}.
+        Data were reconstructed without \gls{AC} using \gls{OSEM} with two full iterations \& $24$ subsets.%~\cite{Hudson1994}.
         Volumes were post-filtered using a Gaussian blur with a kernel size of \SI{6.4}{\milli\metre} \gls{FWHM}.
     
     \subsection{Motion Model Estimation} \label{sec:motion_model_estimation}
-        For each dataset \gls{3D} B-spline interpolated \glss{DVF} were used to model spatial deformations. A generalised framework unifying \gls{IR} \& respiratory \glss{MM}, NiftyRegResp, was used to estimate \glss{RCM} \& \glss{MCIR}~\cite{McClelland2017}. \gls{SSD} was used as the objective function \& the second order derivative of the \gls{DVF} was used as a penalty.% The \gls{CPG} spacing of the \gls{DVF} \& penalty weight were tuned using a grid search.
+        For each dataset \gls{3D} B-spline interpolated \glss{CPG} were used to model spatial deformations. A generalised framework unifying \gls{IR} \& respiratory \glss{MM} was used to estimate \glss{RCM} \& \glss{MCIR}~\cite{McClelland2017}. \gls{SSD} was used as the similarity measure \& bending energy was used as a penalty.% The \gls{CPG} spacing \& penalty weight were tuned using a grid search.
     
     \subsection{Attenuation Map Warping} \label{sec:attenuation_map_warping}
-        A \gls{Mu-Map}, as close to the mean respiratory position as possible, was selected from the \glss{Mu-Map} generated by \gls{XCAT}, this \gls{Mu-Map} was then registered to the \gls{MCIR} generated while fitting the \gls{RCM} from~\Fref{sec:motion_model_estimation}. A \gls{NMI} registration was used to accomplish this.% with parameters selected using a grid search.
+        A \gls{Mu-Map}, as close to the mean respiratory position as possible, was selected from the \glss{Mu-Map} generated by \gls{XCAT}, this \gls{Mu-Map} was then registered to the mean position volume generated while fitting the \gls{RCM} from~\Fref{sec:motion_model_estimation}. A \gls{NMI} registration was used to accomplish this.% with parameters selected using a grid search.
         The \gls{RCM} was then used to generate \glss{DVF} for the \gls{SS} values of each bin, which were then used to warp the \gls{Mu-Map} from the mean respiratory position to each bin.
         
     \subsection{Attenuation Corrected Motion Corrected Image Reconstruction} \label{sec:attenuation_corrected_image_reconstruction}
-        Data were re-reconstructed with \gls{AC} using the \glss{Mu-Map} from~\Fref{sec:attenuation_map_warping}. The same reconstruction parameters as in~\Fref{sec:attenuation_corrected_image_reconstruction} were used. This data was then both either \gls{MC} using the original \gls{NAC} \gls{RCM} or a new \gls{RCM} was fit on the \gls{AC} data as in~\Fref{sec:motion_model_estimation} to generate a final \gls{AC} \gls{MCIR}.
+        Data were re-reconstructed with \gls{AC} using the \glss{Mu-Map} from~\Fref{sec:attenuation_map_warping}. The same reconstruction parameters as in~\Fref{sec:attenuation_corrected_image_reconstruction} were used. This data was then either \gls{MC} using the original \gls{NAC} \gls{RCM} or a new \gls{RCM} was fit on the \gls{AC} data as in~\Fref{sec:motion_model_estimation}.
     
     \subsection{Evaluation} \label{sec:evaluation}
         %To evaluate the validity of the \gls{MM} results, the \gls{COM} of the lesion, over time, was tracked for both \gls{NAC} \& \gls{AC} reconstructions. This was achieved by warping a volume only including the lesion in the reference position, \& then computing its \gls{COM}.
@@ -49,7 +46,7 @@
     %    \centering
     %    \includegraphics[width=0.5\linewidth]{figures/com.png}
     %    \captionsetup{singlelinecheck=false, justification=centering}
-    %    \caption{The path of the \gls{COM} of the lesion. Horizontal (respectively vertical) axis corresponds to motion in the \gls{AP} (respectively \gls{SI}). Different curves denote \gls{COM} displacement for  ground truth data, the estimated data from the \gls{NAC} based \gls{RCM} \& the estimated data from the \gls{AC} based \gls{RCM}.}
+    %    \caption{The path of the \gls{COM} of the lesion. Horizontal (respectively vertical) axis corresponds to motion in the \gls{SI} (respectively \gls{AP}). Different curves denote \gls{COM} displacement for  ground truth data, the estimated data from the \gls{NAC} based \gls{RCM} \& the estimated data from the \gls{AC} based \gls{RCM}.}
     %    \label{fig:com}
     %\end{figure}
     
@@ -93,7 +90,7 @@
         \label{tab:suv}
     \end{table}
     
-     The \gls{CCP} data \& the the new method data can be seen in~\Fref{fig:visual_analysis}. When compared visually structures can be seen in the the new method data that cannot be seen in the \gls{CCP} data, for instance, structures at the boundary between the diaphragm \& the lung. Additionally, the boundary between the lesion \& the lung appears to be sharper \& the lesion itself more homogeneous, this can be observed in the profile across the lesion in~\Fref{fig:profile}. \gls{SUV} results can be seen in~\Fref{tab:suv} \& consistently show that \glss{SUV} are greater for the new method over \gls{CCP}.
+     The \gls{CCP} data \& the new method data can be seen in~\Fref{fig:visual_analysis}. When compared visually structures can be seen in the new method data that cannot be seen in the \gls{CCP} data, for instance, structures at the boundary between the diaphragm \& the lung. Additionally, the boundary between the lesion \& the lung appears to be sharper \& the lesion itself more homogeneous, this can be observed in the profile across the lesion in~\Fref{fig:profile}. \gls{SUV} results can be seen in~\Fref{tab:suv} \& consistently show that \glss{SUV} are greater for the new method over \gls{CCP}.
 
 \section{Discussion \& Conclusions} \label{sec:discussion_and_conclusions}
     %\glss{MM} derived from \gls{NAC} \& \gls{AC} volumes for both data containing intra- \& inter-respiratory cycle motion were found to be relatively robust when comparing \gls{COM}. 
